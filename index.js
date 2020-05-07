@@ -33,12 +33,9 @@ async function handleRequest(request) {
     let response = await fetch(b2request);
 
     // Remove B2 headers.
-    let headers = new Headers(response.headers);
-    b2headers.forEach(header => {
-        headers.delete(header);
-    })
+    let headers = updateHeaders(response.headers);
 
-    // Return the response.
+    // Return the response with the updated headers.
     return new Response(response.body, {
         status: response.status,
         statusText: response.statusText,
@@ -63,4 +60,23 @@ function updateRequest(request) {
         method: request.method,
         headers: request.headers
     })
+}
+
+/**
+ * Updates headers from a Backblaze B2 response so all of Backblaze's headers
+ * are removed.
+ *
+ * @param {Headers} headers The Headers to be updated.
+ */
+function updateHeaders(headers) {
+    // Make a copy of the request's headers.
+    let headers = new Headers(headers);
+
+    // Delete the headers Backblaze adds.
+    b2headers.forEach(header => {
+        headers.delete(header);
+    })
+
+    // Return the new headers.
+    return headers;
 }
