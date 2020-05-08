@@ -1,7 +1,3 @@
-addEventListener('fetch', event => {
-    event.respondWith(handleRequest(event.request))
-})
-
 // The path used for fetching files from the bucket.
 const b2path = `/file/${BUCKET_NAME}/`
 
@@ -18,9 +14,10 @@ const b2headers = [
 /**
  * Serve content from the B2 bucket.
  *
- * @param {Request} request
+ * @param request The request for content from the bucket.
+ * @returns The response with the requested content.
  */
-async function handleRequest(request) {
+export async function handleRequest(request: Request): Promise<Response> {
     // Make sure the environmental variable for the bucket was set.
     if (BUCKET_NAME === "") {
         throw "Bucket name not set";
@@ -46,9 +43,10 @@ async function handleRequest(request) {
 /**
  * Updates a request for serving from a B2 bucket.
  *
- * @param {Request} request The Request to be updated.
+ * @param request The Request to be updated.
+ * @returns The updated Request for fetching from the B2 bucket.
  */
-function updateRequest(request) {
+function updateRequest(request: Request): Request {
     // Copy the request's URL.
     let url = new URL(request.url);
 
@@ -66,9 +64,10 @@ function updateRequest(request) {
  * Updates headers from a Backblaze B2 response so all of Backblaze's headers
  * are removed.
  *
- * @param {Headers} headers The Headers to be updated.
+ * @param headers The Headers to be updated.
+ * @returns The updated Headers without Backblaze's additions.
  */
-function updateHeaders(headers) {
+function updateHeaders(headers: Headers): Headers {
     // Make a copy of the headers.
     let mutHeaders = new Headers(headers);
 
