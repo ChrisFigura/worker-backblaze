@@ -1,5 +1,5 @@
 // The path used for fetching files from the bucket.
-const b2path = `/file/${BUCKET_NAME}/`
+const b2path = `/file/${BUCKET_NAME}`
 
 // Headers Backblaze adds that I should remove.
 const b2headers = [
@@ -26,18 +26,14 @@ export async function handleRequest(request: Request): Promise<Response> {
     // Update the request for B2.
     let b2request = updateRequest(request);
 
-    // Fetch the response
-    let response = await fetch(b2request);
+    // Fetch the response from B2.
+    let b2response = await fetch(b2request);
 
-    // Remove B2 headers.
-    let headers = updateHeaders(response.headers);
+    // Remove Backblaze's headers from the response.
+    let response = updateResponse(b2response);
 
-    // Return the response with the updated headers.
-    return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: headers
-    });
+    // Return the response.
+    return response;
 }
 
 /**
@@ -61,19 +57,21 @@ function updateRequest(request: Request): Request {
 }
 
 /**
- * Updates headers from a Backblaze B2 response so all of Backblaze's headers
- * are removed.
+ * Removes Backblaze's headers from a response.
  *
- * @param headers The Headers to be updated.
- * @returns The updated Headers without Backblaze's additions.
+ * @param response The Response to be updated.
+ * @returns The updated Response without Backblaze's headers.
  */
-function updateHeaders(headers: Headers): Headers {
-    // Make a copy of the headers.
-    let mutHeaders = new Headers(headers);
+function updateResponse(response: Response): Response {
+    // Copy the response's Headers.
+    let headers = new Headers(response.headers);
 
     // Delete the headers Backblaze adds.
-    b2headers.forEach(e => mutHeaders.delete(e));
+    b2headers.forEach(e => headers.delete(e));
 
-    // Return the new headers.
-    return mutHeaders;
+    // Return the updated response.
+    return new Response(response.body, {
+        status: response.status,
+        headers: headers
+    })
 }
