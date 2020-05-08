@@ -42,7 +42,7 @@ export async function handleRequest(request: Request): Promise<Response> {
  * @param request The Request to be updated.
  * @returns The updated Request for fetching from the B2 bucket.
  */
-function updateRequest(request: Request): Request {
+export function updateRequest(request: Request): Request {
     // Copy the request's URL.
     let url = new URL(request.url);
 
