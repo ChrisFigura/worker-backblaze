@@ -69,14 +69,12 @@ function updateRequest(request) {
  * @param {Headers} headers The Headers to be updated.
  */
 function updateHeaders(headers) {
-    // Make a copy of the request's headers.
-    let headers = new Headers(headers);
+    // Make a copy of the headers.
+    let mutHeaders = new Headers(headers);
 
     // Delete the headers Backblaze adds.
-    b2headers.forEach(header => {
-        headers.delete(header);
-    })
+    b2headers.forEach(e => mutHeaders.delete(e));
 
     // Return the new headers.
-    return headers;
+    return mutHeaders;
 }
