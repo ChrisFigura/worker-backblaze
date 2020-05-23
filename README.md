@@ -5,7 +5,7 @@ This is a script for serving content from a public Backblaze B2 bucket using Clo
 You can generate a Cloudflare Workers project for this using [wrangler](https://developers.cloudflare.com/workers/tooling/wrangler).
 
 ```bash
-wrangler generate https://github.com/chrisfigura/worker-backblaze-template
+wrangler generate name-of-project https://github.com/chrisfigura/worker-backblaze
 ```
 
 ## Usage
