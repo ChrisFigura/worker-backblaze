@@ -1,7 +1,7 @@
 // The path used for fetching files from the bucket.
 const b2path = `/file/${BUCKET_NAME}`
 
-// Headers Backblaze adds that I should remove.
+// Headers Backblaze adds that should be removed.
 const b2headers = [
     'x-bz-content-sha1',
     'x-bz-file-id',
